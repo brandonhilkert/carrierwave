@@ -304,11 +304,8 @@ module CarrierWave
 
       def uploader
         @uploader ||= record.class.uploaders[column].new(record, column)
-
-        if @uploader.blank? and not identifier.blank?
-          @uploader.retrieve_from_store!(identifier)
-        end
-        return @uploader
+        @uploader.retrieve_from_store!(identifier) if @uploader.blank? and not identifier.blank?
+        return @uploader.present? ? @uploader : nil
       end
 
       def cache(new_file)
